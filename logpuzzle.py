@@ -50,9 +50,7 @@ def download_images(img_urls, dest_dir):
     Creates the directory if necessary.
     """
     # Creating the directory if the directory does not already exist
-+
-
-    print 'Download Complete!'
+    # print 'Download Complete!'
     pass
 
 
