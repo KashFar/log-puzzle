@@ -19,7 +19,7 @@ Here's what a puzzle url looks like:
 import os
 import re
 import sys
-import urllib
+import urllib as urllib
 import argparse
 
 
@@ -38,7 +38,7 @@ def read_urls(filename):
                 urls.append(url.strip())
     sorted_urls = sorted(set(urls))
     for url in sorted_urls:
-        print url[-8:-4]
+        print (url[-8:-4])
     return sorted_urls
 
 def download_images(img_urls, dest_dir):
@@ -50,14 +50,29 @@ def download_images(img_urls, dest_dir):
     Creates the directory if necessary.
     """
     # Creating the directory if the directory does not already exist
-    # print 'Download Complete!'
+    if not os.path.exists(str(dest_dir)):
+        os.mkdir(dest_dir)
+    print ('Retrieving...')
+    with open(str(dest_dir) + '/index.html', 'w') as f:
+        f.write("<html>\n<body>\n")
+        for index, url in enumerate(img_urls):
+            img_name = 'img' + str(index + 1)
+            urllib.urlretrieve("https://code.google.com" + url, filename=str(dest_dir) + '/'
+            + img_name +'.jpg')
+            print ('Downloaded ' + url[-10:] + ": " + \
+                str(index + 1) + " images downloaded")
+
+            f.write("<img src=" + '"' + img_name +".jpg" +'">')
+        f.write("\n</html>\n</body>")
+    print ('Download Complete!')
     pass
 
 
 def create_parser():
     """Create an argument parser object"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--todir',  help='destination directory for downloaded images')
+    parser.add_argument(
+        '-d', '--todir',  help='destination directory for downloaded images')
     parser.add_argument('logfile', help='apache logfile to extract urls from')
 
     return parser
